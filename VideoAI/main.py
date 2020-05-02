@@ -1,4 +1,5 @@
 import argparse
+import os
 import matplotlib.pyplot as plt
 
 from google.cloud import videointelligence
@@ -9,7 +10,7 @@ def analyze_labels(path):
     video_client = videointelligence.VideoIntelligenceServiceClient()
     features = [videointelligence.enums.Feature.LABEL_DETECTION]
     operation = video_client.annotate_video(path, features=features)
-    print('\nProcessing video for label annotations:')
+    print('\nNow processing ' + str(path) + ' for label annotations:')
 
     result = operation.result(timeout=90)
     print('\nFinished processing.')
@@ -40,7 +41,8 @@ def analyze_labels(path):
     fig1, ax1 = plt.subplots()
     ax1.pie(values, labels=labels, autopct='%1.1f%%',
             shadow=True, startangle=180)
-    fig1.suptitle('Top 10 subjects', fontsize=16)
+    title_string = 'Top 10 topics in ' + str(path)
+    fig1.suptitle(title_string, fontsize=16)
 
     plt.show()
 
